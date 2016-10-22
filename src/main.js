@@ -1,12 +1,8 @@
-window.onload = () => {
+import overlayText from './overlay-text/overlay-text';
+
+window.addEventListener('load', () => {
     let $div = document.getElementById('div');
     let $input = document.getElementById('input');
 
-    $input.addEventListener('input', function (evt) {
-        $div.innerText = this.value;
-    });
-
-    $input.addEventListener('blur', function (evt) {
-        this.focus();
-    });
-};
+    overlayText.initialize($div, $input);
+});
