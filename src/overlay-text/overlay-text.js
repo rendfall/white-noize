@@ -1,21 +1,23 @@
-let $root = null;
-let $input = null;
+class OverlayText {
+    constructor($input, $overlay) {
+        this.$input = $input;
+        this.$overlay = $overlay;
 
-function attachEvents() {
-    $input.addEventListener('input', (evt) => {
-        $root.innerText = evt.target.value;
-    });
+        this.attachEvents();
+    }
 
-    $input.addEventListener('blur', (evt) => {
-        evt.target.focus();
-    });
-}
+    setText(val) {
+        this.$overlay.innerText = val;
+    }
 
-export default {
-    initialize($overlay, $source) {
-        $root = $overlay;
-        $input = $source;
+    setFocus() {
+        this.$input.focus();
+    }
 
-        attachEvents();
+    attachEvents() {
+        this.$input.addEventListener('input', (evt) => this.setText(evt.target.value));
+        this.$input.addEventListener('blur', () => this.setFocus());
     }
 }
+
+export default OverlayText;
