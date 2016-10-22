@@ -2,12 +2,12 @@ let $root = null;
 let $input = null;
 
 function attachEvents() {
-    $input.addEventListener('input', function (evt) {
-        $root.innerText = this.value;
+    $input.addEventListener('input', (evt) => {
+        $root.innerText = evt.target.value;
     });
 
-    $input.addEventListener('blur', function (evt) {
-        this.focus();
+    $input.addEventListener('blur', (evt) => {
+        evt.target.focus();
     });
 }
 
