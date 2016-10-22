@@ -1,0 +1,19 @@
+{
+    "name": "white-noiz",
+    "version": "0.1.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "build": "rollup -c",
+        "watch": "rollup -c --watch"
+    },
+    "author": "rendfall",
+    "license": "MIT",
+    "devDependencies": {
+        "babel-preset-es2015-rollup": "^1.2.0",
+        "rollup": "^0.36.3",
+        "rollup-plugin-babel": "^2.6.1",
+        "rollup-plugin-uglify": "^1.0.1",
+        "rollup-watch": "^2.5.0"
+    }
+}
