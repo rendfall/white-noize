@@ -11,7 +11,15 @@
             height: 100%;
         }
 
-        #div {
+        #input {
+            position: absolute !important;
+            height: 1px;
+            width: 1px;
+            overflow: hidden;
+            clip: rect(1px,1px,1px,1px);
+        }
+
+        #overlay {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -23,7 +31,7 @@
     </style>
 </head>
 <body>
-    <div id="div">Lorem ipsum</div>
+    <div id="overlay">Lorem ipsum</div>
     <input id="input" type="text" autofocus />
     <script src="dist/app.js"></script>
 </body>
