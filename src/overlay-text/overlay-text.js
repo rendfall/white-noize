@@ -1,22 +1,39 @@
 class OverlayText {
-    constructor($input, $overlay) {
-        this.$input = $input;
-        this.$overlay = $overlay;
-
-        this.attachEvents();
+    constructor() {
+        this.createDOM();
+        this.setupListeners();
     }
 
     setText(val) {
-        this.$overlay.innerText = val;
+        this.$text.innerText = val;
     }
 
     setFocus() {
         this.$input.focus();
     }
 
-    attachEvents() {
-        this.$input.addEventListener('input', (evt) => this.setText(evt.target.value));
-        this.$input.addEventListener('blur', () => this.setFocus());
+    setupListeners() {
+        let $i = this.$input;
+
+        $i.addEventListener('input', (event) => this.setText(event.target.value));
+        $i.addEventListener('blur', (event) => this.setFocus());
+    }
+
+    render($target) {
+        $target.appendChild(this.$overlay);
+    }
+
+    createDOM() {
+        let $o = this.$overlay = document.createElement('div');
+        let $t = this.$text = document.createElement('i');
+        let $i = this.$input = document.createElement('input');
+
+        $o.id = 'overlay';
+        $i.type = 'text';
+        $i.autofocus = true;
+
+        $o.appendChild($t);
+        $o.appendChild($i);
     }
 }
 

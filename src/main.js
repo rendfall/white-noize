@@ -1,7 +1,8 @@
 import OverlayText from './overlay-text/overlay-text';
 
 window.addEventListener('load', () => {
-    let $overlay = document.getElementById('overlay');
-    let $input = document.getElementById('input');
-    let overlayText = new OverlayText($input, $overlay);
+    let $content = document.getElementById('content');
+    let overlayText = new OverlayText();
+
+    overlayText.render($content);
 });
