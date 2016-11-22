@@ -15,12 +15,23 @@ class OverlayText {
     setupListeners() {
         let $i = this.$input;
 
-        $i.addEventListener('input', (event) => this.setText(event.target.value));
+        $i.addEventListener('input', (event) => {
+            this.setText(event.target.value);
+            this.refresh();
+        });
         $i.addEventListener('blur', (event) => this.setFocus());
     }
 
     render($target) {
         $target.appendChild(this.$overlay);
+    }
+
+    refresh() {
+        if (this.$input.value.length > 0) {
+            this.$overlay.classList.add('dim');
+        } else {
+            this.$overlay.classList.remove('dim');
+        }
     }
 
     createDOM() {
