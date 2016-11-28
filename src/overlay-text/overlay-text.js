@@ -1,3 +1,9 @@
+import KEYCODES from './../common/keycodes';
+
+const EVENTS = {
+    ENTER: 'OverlayText:enter'
+};
+
 class OverlayText {
     constructor() {
         this.createDOM();
@@ -18,36 +24,14 @@ class OverlayText {
         this.$input.focus();
     }
 
-    badAnswer() {
-        this.$overlay.style.boxShadow = 'inset 0px 0px 59px 10px rgba(255,0,0,0.75)';
-
-        setTimeout(() => {
-            this.$overlay.style.boxShadow = '';
-            this.clearText();
-        }, 1000);
-    }
-
-    goodAnswer() {
-        this.$overlay.style.boxShadow = 'inset 0px 0px 59px 10px rgba(0,255,0,0.75)';
-
-        setTimeout(() => {
-            this.$overlay.style.boxShadow = '';
-            this.clearText();
-        }, 1000);
-    }
-
     doKeyAction(keyCode) {
         switch (keyCode) {
-            case 27: // Escape
+            case KEYCODES.ESCAPE:
                 this.clearText();
                 break;
-
-            case 13: // Enter
-                    // this.goodAnswer();
-                    this.badAnswer();
+            case KEYCODES.ENTER:
+                alert('ok');
                 break;
-            default:
-                // No default action.
         }
     }
 
@@ -58,6 +42,7 @@ class OverlayText {
             this.setText(event.target.value);
             this.refresh();
         });
+
         $i.addEventListener('keyup', (event) => this.doKeyAction(event.keyCode));
         $i.addEventListener('blur', (event) => this.setFocus());
     }
@@ -66,11 +51,24 @@ class OverlayText {
         $target.appendChild(this.$overlay);
     }
 
+    hasValue() {
+        let value = this.$input.value.trim();
+        return (value.length > 0);
+    }
+
+    addDimmer() {
+        this.$overlay.classList.add('dim');
+    }
+
+    removeDimmer() {
+        this.$overlay.classList.remove('dim');
+    }
+
     refresh() {
-        if (this.$input.value.length > 0) {
-            this.$overlay.classList.add('dim');
+        if (this.hasValue()) {
+            this.addDimmer();
         } else {
-            this.$overlay.classList.remove('dim');
+            this.removeDimmer();
         }
     }
 
