@@ -1,3 +1,4 @@
+import EventEmitter from 'super-event-emitter';
 import KEYCODES from './../common/keycodes';
 
 const EVENTS = {
@@ -6,6 +7,8 @@ const EVENTS = {
 
 class OverlayText {
     constructor() {
+        EventEmitter.mixin(this);
+
         this.createDOM();
         this.setupListeners();
     }
