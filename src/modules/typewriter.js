@@ -2,10 +2,10 @@ import EventEmitter from 'super-event-emitter';
 import KEYCODES from './../common/keycodes';
 
 const EVENTS = {
-    ENTER: 'OverlayText:enter'
+    ENTER: 'Typewriter:enter'
 };
 
-class OverlayText {
+class Typewriter {
     constructor() {
         EventEmitter.mixin(this);
 
@@ -89,4 +89,4 @@ class OverlayText {
     }
 }
 
-export default OverlayText;
+export default Typewriter;

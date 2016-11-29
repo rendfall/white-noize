@@ -1,8 +1,8 @@
-import OverlayText from './overlay-text/overlay-text';
+import Typewriter from './modules/typewriter';
 
 window.addEventListener('load', () => {
     let $content = document.getElementById('content');
-    let overlayText = new OverlayText();
+    let typewriter = new Typewriter();
 
-    overlayText.render($content);
+    typewriter.render($content);
 });
