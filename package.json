@@ -2,20 +2,23 @@
     "name": "white-noiz",
     "version": "0.1.0",
     "description": "",
-    "main": "main.js",
+    "main": "src/main.js",
     "scripts": {
-        "build": "rollup -c",
-        "watch": "rollup -c --watch"
+        "build": "webpack",
+        "prod": "webpack -p --optimize-dedupe",
+        "watch": "webpack --watch"
     },
     "author": "rendfall",
     "license": "MIT",
     "devDependencies": {
-        "babel-preset-es2015-rollup": "^1.2.0",
-        "rollup": "^0.36.3",
-        "rollup-plugin-babel": "^2.6.1",
-        "rollup-plugin-uglify": "^1.0.1",
-        "uglify-js": "git://github.com/mishoo/UglifyJS2.git#harmony",
-        "rollup-watch": "^2.5.0",
+        "babel-core": "^6.18.2",
+        "babel-loader": "^6.2.8",
+        "babel-preset-es2015": "^6.18.0",
+        "babel-preset-stage-0": "^6.16.0",
+        "webpack": "^1.13.3",
+        "style-loader": "^0.13.1",
+        "css-loader": "^0.26.0",
+        "sass-loader": "^4.0.2",
         "super-event-emitter": "^4.1.4"
     }
 }
