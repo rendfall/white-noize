@@ -2,7 +2,7 @@ import EventEmitter from 'super-event-emitter';
 import KEYCODES from './../common/keycodes';
 
 const EVENTS = {
-    ENTER: 'Typewriter:enter'
+    ENTER: 'enter'
 };
 
 class Typewriter {
@@ -33,7 +33,7 @@ class Typewriter {
                 this.clearText();
                 break;
             case KEYCODES.ENTER:
-                alert('ok');
+                this.emit(EVENTS.ENTER, { value: this.$input.value });
                 break;
         }
     }
