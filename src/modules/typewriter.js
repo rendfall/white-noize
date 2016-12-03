@@ -2,7 +2,8 @@ import EventEmitter from 'super-event-emitter';
 import KEYCODES from './../common/keycodes';
 
 const EVENTS = {
-    ENTER: 'Typewriter:enter'
+    ENTER: 'enter',
+    ESCAPE: 'escape'
 };
 
 class Typewriter {
@@ -30,24 +31,27 @@ class Typewriter {
     doKeyAction(keyCode) {
         switch (keyCode) {
             case KEYCODES.ESCAPE:
-                this.clearText();
+                this.emit(EVENTS.ESCAPE);
                 break;
             case KEYCODES.ENTER:
-                alert('ok');
+                this.emit(EVENTS.ENTER, { value: this.$input.value });
                 break;
         }
+    }
+
+    doInputAction() {
+        this.setText(event.target.value);
+        this.refresh();
     }
 
     setupListeners() {
         let $i = this.$input;
 
-        $i.addEventListener('input', (event) => {
-            this.setText(event.target.value);
-            this.refresh();
-        });
-
+        $i.addEventListener('input', (event) => this.doInputAction());
         $i.addEventListener('keyup', (event) => this.doKeyAction(event.keyCode));
         $i.addEventListener('blur', (event) => this.setFocus());
+
+        this.on(EVENTS.ESCAPE, (event) => this.clearText());
     }
 
     render($target) {
