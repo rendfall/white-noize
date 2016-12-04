@@ -10,35 +10,61 @@ import Request from './modules/request';
         typewriter.render($content);
     }
 
-    function setupRiddle() {
+    function loadRiddle(data) {
+        let $image = setupImage(data.image);
+        let $text = setupText(data.content);
+        let $background = setupBackground(data.background);
+        let $music = setupMusic(data.music);
+        let $ambience = setupAmbience(data.ambience);
+
+        $riddle.appendChild($image);
+        $riddle.appendChild($text);
+        $riddle.appendChild($music);
+        $riddle.appendChild($ambience);
+    }
+
+    function setupImage(src) {
         let $image = new Image();
+        $image.src = src;
+
+        return $image;
+    }
+
+    function setupText(content) {
         let $text = document.createElement('pre');
+        $text.innerHTML = content;
+
+        return $text;
+    }
+
+    function setupBackground(url) {
+        $content.style.backgroundImage = `url("${url}")`;
+    }
+
+    function setupMusic(src) {
         let $music = new Audio();
-        let $ambient = new Audio();
+        $music.type = 'audio/mpeg';
+        $music.autoplay = true;
+        $music.loop = true;
+        $music.src = src;
 
+        return $music;
+    }
+
+    function setupAmbience(src) {
+        let $ambience = new Audio();
+        $ambience.type = 'audio/mpeg';
+        $ambience.autoplay = true;
+        $ambience.loop = true;
+        $ambience.volume = 0.8;
+        $ambience.src = src;
+
+        return $ambience;
+    }
+
+    function setupRiddle() {
         let request = new Request('riddle.json');
-        request.on('success', (response) => {
-            $image.src = response.image;
-            $content.style.backgroundImage = `url("${response.background}")`;
-
-            $text.innerHTML = response.content;
-
-            $music.type = 'audio/mpeg';
-            $music.autoplay = true;
-            $music.loop = true;
-            $music.src = response.music;
-            $ambient.type = 'audio/mpeg';
-
-            $ambient.autoplay = true;
-            $ambient.loop = true;
-            $ambient.volume = 0.8;
-            $ambient.src = response.ambient;
-
-            $riddle.appendChild($image);
-            $riddle.appendChild($text);
-            $riddle.appendChild($music);
-            $riddle.appendChild($ambient);
-        });
+        request.on('success', (response) => loadRiddle(response));
         request.send();
     }
 

@@ -4,5 +4,5 @@
     "image": "http://zestriddle.ovh.org/zest_riddle/one.jpg",
     "background": "http://zestriddle.ovh.org/back22.jpg",
     "music": "http://127.0.0.1/one.mp3",
-    "ambient": "http://zestriddle.ovh.org/music/one.mp3"
+    "ambience": "http://zestriddle.ovh.org/music/one.mp3"
 }
