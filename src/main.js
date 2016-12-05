@@ -1,5 +1,6 @@
 import Typewriter from './modules/typewriter';
 import Request from './modules/request';
+import { AudioElement, ImageElement, TextElement } from './elements/all';
 
 (function () {
     let $content = document.getElementById('content');
@@ -11,60 +12,49 @@ import Request from './modules/request';
     }
 
     function loadRiddle(data) {
-        let $image = setupImage(data.image);
-        let $text = setupText(data.content);
-        let $background = setupBackground(data.background);
-        let $music = setupMusic(data.music);
-        let $ambience = setupAmbience(data.ambience);
+        let { image, content, background, music, ambience } = data;
 
-        $riddle.appendChild($image);
-        $riddle.appendChild($text);
-        $riddle.appendChild($music);
-        $riddle.appendChild($ambience);
+        setupImage(image);
+        setupText(content);
+        setupBackground(background);
+        setupMusic(music);
+        setupAmbience(ambience);
     }
 
     function setupImage(src) {
-        let $image = new Image();
-        $image.src = src;
-
-        return $image;
+        let image = new ImageElement(src);
+        image.render($riddle);
     }
 
     function setupText(content) {
-        let $text = document.createElement('pre');
-        $text.innerHTML = content;
-
-        return $text;
+        let text = new TextElement(content);
+        text.render($riddle);
     }
 
     function setupBackground(url) {
-        $content.style.backgroundImage = `url("${url}")`;
+        $content.style.background = `#333 url("${url}") repeat 0 0`;
     }
 
     function setupMusic(src) {
-        let $music = new Audio();
-        $music.type = 'audio/mpeg';
-        $music.autoplay = true;
-        $music.loop = true;
-        $music.src = src;
+        let music = new AudioElement(src);
 
-        return $music;
+        music.setVolume(1.0);
+        music.play();
+        music.render($riddle);
     }
 
     function setupAmbience(src) {
-        let $ambience = new Audio();
-        $ambience.type = 'audio/mpeg';
-        $ambience.autoplay = true;
-        $ambience.loop = true;
-        $ambience.volume = 0.8;
-        $ambience.src = src;
+        let ambience = new AudioElement(src);
 
-        return $ambience;
+        ambience.setVolume(0.8);
+        ambience.play();
+        ambience.render($riddle);
     }
 
     function setupRiddle() {
         let request = new Request('riddle.json');
         request.on('success', (response) => loadRiddle(response));
+        request.on('error', (error) => { console.log(error) });
         request.send();
     }
 
