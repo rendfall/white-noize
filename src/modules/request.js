@@ -9,17 +9,28 @@ const CONTENT_TYPES = {
 };
 
 class Request {
-    constructor(url, data = {}) {
-        this.params = { url, data };
+    constructor(url, params = {}) {
+        this.url = url;
+        this.params = params;
+        this.xhr = new XMLHttpRequest();
 
         EventEmitter.mixin(this);
     }
 
-    send() {
-        let { url, data } = this.params;
-        let xhr = new XMLHttpRequest();
+    setContentType() {
+        this.xhr.setRequestHeader('Content-Type', `${CONTENT_TYPES.PLAIN};charset=UTF-8`);
+    }
 
-        xhr.open('GET', url, true);
+    send() {
+        let { xhr, url } = this;
+        let { method, data } = this.params;
+
+        xhr.open(method || 'GET', url, true);
+
+        if (Request.isPOST(method)) {
+            this.setContentType();
+        }
+
         xhr.onloadend = () => {
             try {
                 let response = JSON.parse(xhr.responseText);
@@ -29,6 +40,10 @@ class Request {
             }
         };
         xhr.send(JSON.stringify(data));
+    }
+
+    static isPOST(method) {
+        return (/POST/i).test(method);
     }
 }
 

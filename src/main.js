@@ -52,7 +52,7 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
     }
 
     function setupRiddle() {
-        let request = new Request('http://whitenoize.pl/zest/one/riddle.json');
+        let request = new Request('http://whitenoize.pl/zest/');
         request.on('success', (response) => loadRiddle(response));
         request.on('error', (error) => { console.log(error) });
         request.send();
