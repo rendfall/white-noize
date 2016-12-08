@@ -35,6 +35,7 @@ class Typewriter {
                 break;
             case KEYCODES.ENTER:
                 this.emit(EVENTS.ENTER, { value: this.$input.value });
+                this.clearText();
                 break;
         }
     }
