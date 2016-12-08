@@ -56,7 +56,7 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
     function setupAmbience(src) {
         let ambience = new AudioElement(src);
 
-        ambience.setVolume(0.8);
+        ambience.setVolume(0.5);
         ambience.play();
         ambience.render($riddle);
     }
