@@ -9,6 +9,16 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
     function setupTypewriter() {
         let typewriter = new Typewriter();
         typewriter.render($content);
+
+        typewriter.on('enter', (payload) => {
+            validateAnswer(payload.value, (url) => {
+                if (url) {
+                    alert('Congratulation!');
+                } else {
+                    alert('Bad answer. Try again.');
+                }
+            });
+        });
     }
 
     function loadRiddle(data) {
@@ -49,6 +59,20 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         ambience.setVolume(0.8);
         ambience.play();
         ambience.render($riddle);
+    }
+
+    function validateAnswer(text, callback) {
+        let method = 'POST';
+        let data = {
+            riddle: 0,
+            ts: Date.now(),
+            answer: text
+        };
+        let request = new Request('http://whitenoize.pl/zest/', { method, data });
+
+        request.on('success', (response) => callback(response.url));
+        request.on('error', (error) => { console.log(error) });
+        request.send();
     }
 
     function setupRiddle() {

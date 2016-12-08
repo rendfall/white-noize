@@ -18,7 +18,7 @@ class Request {
     }
 
     setContentType() {
-        this.xhr.setRequestHeader('Content-Type', `${CONTENT_TYPES.PLAIN};charset=UTF-8`);
+        this.xhr.setRequestHeader('Content-Type', `${CONTENT_TYPES.JSON};charset=UTF-8`);
     }
 
     send() {
