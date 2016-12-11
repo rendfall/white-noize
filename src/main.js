@@ -1,19 +1,26 @@
 import Typewriter from './modules/typewriter';
-import Request from './modules/request';
+import API from './modules/api';
 import { AudioElement, ImageElement, TextElement } from './elements/all';
 
 (function () {
     let $content = document.getElementById('content');
     let $riddle = document.getElementById('riddle');
+    let ZestRiddle = new API('zest_riddle');
+
+    function getNameFromHash() {
+        let hash = window.location.hash;
+        return (hash) ? hash.slice(1) : '';
+    }
 
     function setupTypewriter() {
         let typewriter = new Typewriter();
         typewriter.render($content);
 
         typewriter.on('enter', (payload) => {
-            validateAnswer(payload.value, (url) => {
-                if (url) {
-                    alert('Congratulation!');
+            validateAnswer(payload.value, (response) => {
+                if (response) {
+                    window.location.hash = response.next;
+                    setupRiddle();
                 } else {
                     alert('Bad answer. Try again.');
                 }
@@ -61,22 +68,22 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         ambience.render($riddle);
     }
 
-    function validateAnswer(text, callback) {
-        let method = 'POST';
-        let data = {
-            riddle: 0,
-            ts: Date.now(),
-            answer: text
-        };
-        let request = new Request('http://whitenoize.pl/zest/', { method, data });
+    function validateAnswer(password, callback) {
+        let name = getNameFromHash() || 'one';
+        let request = ZestRiddle.validate(name, password);
 
-        request.on('success', (response) => callback(response.url));
+        request.on('success', (response) => callback(response));
         request.on('error', (error) => { console.log(error) });
         request.send();
     }
 
     function setupRiddle() {
-        let request = new Request('http://whitenoize.pl/zest/');
+        // TODO(rendfall): Create destroy riddle feature.
+        $riddle.innerHTML = '';
+
+        let name = (getNameFromHash() || 'one');
+        let request = ZestRiddle.getRiddle(name);
+
         request.on('success', (response) => loadRiddle(response));
         request.on('error', (error) => { console.log(error) });
         request.send();
