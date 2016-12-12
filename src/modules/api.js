@@ -1,36 +1,27 @@
 import Request from './request';
 
 const SERVER_URL = '//whitenoize.pl';
-const SERVICES_URL = {
-    GET_RIDDLE: `${SERVER_URL}/api/get_riddle/`,
-    VALIDATE: `${SERVER_URL}/api/validate/`
-};
+const GET_RIDDLE_SERVICE_URL = `${SERVER_URL}/api/get_riddle/`;
 
 class API {
     constructor(riddleName) {
-        this.riddleName = riddleName;
+        this.name = riddleName;
         this.method = 'POST';
     }
 
     makeRequest(url, params) {
         let method = this.method;
         let data = Object.assign({
-            riddle: this.riddleName
+            name: this.name
         }, params);
 
         return new Request(url, { method, data });
     }
 
-    getRiddle(name) {
-        let data = { name };
+    getRiddle(password) {
+        let data = { password };
 
-        return this.makeRequest(SERVICES_URL.GET_RIDDLE, data);
-    }
-
-    validate(name, password) {
-        let data = { name, password };
-
-        return this.makeRequest(SERVICES_URL.VALIDATE, data);
+        return this.makeRequest(GET_RIDDLE_SERVICE_URL, data);
     }
 }
 

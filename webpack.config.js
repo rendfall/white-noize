@@ -6,7 +6,7 @@ module.exports = {
         filename: 'app.js'
     },
 
-    devtool: 'source-map',
+    devtool: 'cheap-source-map',
 
     module: {
         loaders: [

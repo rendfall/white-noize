@@ -16,16 +16,7 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         let typewriter = new Typewriter();
         typewriter.render($content);
 
-        typewriter.on('enter', (payload) => {
-            validateAnswer(payload.value, (response) => {
-                if (response) {
-                    window.location.hash = response.next;
-                    setupRiddle();
-                } else {
-                    alert('Bad answer. Try again.');
-                }
-            });
-        });
+        typewriter.on('enter', (payload) => setupRiddle(payload.value));
     }
 
     function loadRiddle(data) {
@@ -36,6 +27,10 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         setupBackground(background);
         setupMusic(music);
         setupAmbience(ambience);
+    }
+
+    function setupHash(name) {
+        window.location.hash = name;
     }
 
     function setupImage(src) {
@@ -68,29 +63,30 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         ambience.render($riddle);
     }
 
-    function validateAnswer(password, callback) {
-        let name = getNameFromHash() || 'one';
-        let request = ZestRiddle.validate(name, password);
-
-        request.on('success', (response) => callback(response));
-        request.on('error', (error) => { console.log(error) });
-        request.send();
+    function clearRiddle() {
+        $riddle.innerHTML = '';
     }
 
-    function setupRiddle() {
-        // TODO(rendfall): Create destroy riddle feature.
-        $riddle.innerHTML = '';
-
-        let name = (getNameFromHash() || 'one');
+    function setupRiddle(name) {
         let request = ZestRiddle.getRiddle(name);
 
-        request.on('success', (response) => loadRiddle(response));
+        request.on('success', (response) => {
+            if (response) {
+                clearRiddle();
+                setupHash(name);
+                loadRiddle(response);
+            } else {
+                alert('Bad answer. Try again.');
+            }
+        });
         request.on('error', (error) => { console.log(error) });
         request.send();
     }
 
     window.addEventListener('load', () => {
+        let name = (getNameFromHash() || 'one');
+
         setupTypewriter();
-        setupRiddle();
+        setupRiddle(name);
     });
 })();
