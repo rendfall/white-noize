@@ -1,24 +1,22 @@
 import Typewriter from './modules/typewriter';
-import Request from './modules/request';
+import API from './modules/api';
 import { AudioElement, ImageElement, TextElement } from './elements/all';
 
 (function () {
     let $content = document.getElementById('content');
     let $riddle = document.getElementById('riddle');
+    let ZestRiddle = new API('zest_riddle');
+
+    function getNameFromHash() {
+        let hash = window.location.hash;
+        return (hash) ? hash.slice(1) : '';
+    }
 
     function setupTypewriter() {
         let typewriter = new Typewriter();
         typewriter.render($content);
 
-        typewriter.on('enter', (payload) => {
-            validateAnswer(payload.value, (url) => {
-                if (url) {
-                    alert('Congratulation!');
-                } else {
-                    alert('Bad answer. Try again.');
-                }
-            });
-        });
+        typewriter.on('enter', (payload) => setupRiddle(payload.value));
     }
 
     function loadRiddle(data) {
@@ -29,6 +27,10 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         setupBackground(background);
         setupMusic(music);
         setupAmbience(ambience);
+    }
+
+    function setupHash(name) {
+        window.location.hash = name;
     }
 
     function setupImage(src) {
@@ -61,29 +63,30 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         ambience.render($riddle);
     }
 
-    function validateAnswer(text, callback) {
-        let method = 'POST';
-        let data = {
-            riddle: 0,
-            ts: Date.now(),
-            answer: text
-        };
-        let request = new Request('http://whitenoize.pl/zest/', { method, data });
-
-        request.on('success', (response) => callback(response.url));
-        request.on('error', (error) => { console.log(error) });
-        request.send();
+    function clearRiddle() {
+        $riddle.innerHTML = '';
     }
 
-    function setupRiddle() {
-        let request = new Request('http://whitenoize.pl/zest/');
-        request.on('success', (response) => loadRiddle(response));
+    function setupRiddle(name) {
+        let request = ZestRiddle.getRiddle(name);
+
+        request.on('success', (response) => {
+            if (response) {
+                clearRiddle();
+                setupHash(name);
+                loadRiddle(response);
+            } else {
+                alert('Bad answer. Try again.');
+            }
+        });
         request.on('error', (error) => { console.log(error) });
         request.send();
     }
 
     window.addEventListener('load', () => {
+        let name = (getNameFromHash() || 'one');
+
         setupTypewriter();
-        setupRiddle();
+        setupRiddle(name);
     });
 })();
