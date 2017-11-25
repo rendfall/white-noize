@@ -1,5 +1,6 @@
+import axios from 'axios';
+
 import Typewriter from './modules/typewriter';
-import Request from './modules/request';
 import { AudioElement, ImageElement, TextElement } from './elements/all';
 
 (function () {
@@ -62,24 +63,27 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
     }
 
     function validateAnswer(text, callback) {
-        let method = 'POST';
+        let method = 'post';
+        let url = 'http://whitenoize.pl/zest_riddle/';
         let data = {
             riddle: 0,
             ts: Date.now(),
             answer: text
         };
-        let request = new Request('http://whitenoize.pl/zest/', { method, data });
 
-        request.on('success', (response) => callback(response.url));
-        request.on('error', (error) => { console.log(error) });
-        request.send();
+        axios.request({ url, method, data })
+            .then((response) => callback(response.url))
+            .catch((error) => { console.log(error) });
     }
 
     function setupRiddle() {
-        let request = new Request('http://whitenoize.pl/zest/');
-        request.on('success', (response) => loadRiddle(response));
-        request.on('error', (error) => { console.log(error) });
-        request.send();
+        let url = 'http://whitenoize.pl/api/get_riddle/index.php';
+        let method = 'post';
+        let data = { name: 'zest_riddle', password: 'one' };
+
+        axios.request({ method, url, data })
+            .then((response) => loadRiddle(response.data))
+            .catch((error) => { console.log(error) });
     }
 
     window.addEventListener('load', () => {
