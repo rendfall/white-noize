@@ -18,15 +18,19 @@ class App {
     setupTypewriter() {
         let typewriter = new Typewriter();
 
-        // typewriter.on('enter', (payload) => {
-        //     validateAnswer(payload.value, (url) => {
-        //         if (url) {
-        //             alert('Congratulation!');
-        //         } else {
-        //             alert('Bad answer. Try again.');
-        //         }
-        //     });
-        // });
+        typewriter.onValueChange((value) => {
+                if (!value) {
+                    return;
+                }
+
+                this.validateAnswer(value, (response) => {
+                    if (response) {
+                        this.loadRiddle(response.data)
+                    } else {
+                        alert('Bad answer. Try again.');
+                    }
+                });
+            });
 
         typewriter.render(this.$content);
     }
@@ -75,22 +79,21 @@ class App {
 
     validateAnswer(text, callback) {
         let method = 'post';
-        let url = 'http://whitenoize.pl/zest_riddle/';
+        let url = 'http://whitenoize.pl/api/get_riddle/index.php';
         let data = {
-            riddle: 0,
-            ts: Date.now(),
-            answer: text
+            name: 'zest_riddle',
+            password: text
         };
 
         axios.request({ url, method, data })
-            .then((response) => callback(response.url))
+            .then((response) => callback(response))
             .catch((error) => { console.log(error) });
     }
 
     setupRiddle() {
         let url = 'http://whitenoize.pl/api/get_riddle/index.php';
         let method = 'post';
-        let data = { name: 'zest_riddle', password: 'one' };
+        let data = { name: 'zest_riddle' };
 
         axios.request({ method, url, data })
             .then((response) => this.loadRiddle(response.data))

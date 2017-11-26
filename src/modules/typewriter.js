@@ -1,5 +1,8 @@
 import Keyboard from 'keyboardjs';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 const INITIAL_FONT_SIZE = '22vw';
 const LETTER_LIMIT = 80;
 
@@ -7,13 +10,14 @@ export class Typewriter {
     constructor() {
         this.$text = null;
         this.$overlay = null;
+        this.value$ = new BehaviorSubject('');
 
         this.createDOM();
         this.setupListeners();
     }
 
     setText(value) {
-        if (this.$text.innerText.length > LETTER_LIMIT) {
+        if (this.getText().length > LETTER_LIMIT) {
             return;
         }
 
@@ -58,6 +62,7 @@ export class Typewriter {
             return;
         }
 
+        this.value$.next(this.getText());
         this.clearText();
     }
 
@@ -110,6 +115,16 @@ export class Typewriter {
         } else {
             this.removeDimmer();
         }
+    }
+
+    onValueChange(callback) {
+        if (typeof callback !== 'function') {
+            return;
+        }
+
+        this.value$
+            .distinctUntilChanged()
+            .subscribe((...args) => void callback.call(callback, ...args));
     }
 
     resize() {

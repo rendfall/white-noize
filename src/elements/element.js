@@ -24,6 +24,7 @@ export class Element {
     }
 
     render($target) {
+        $target.innerHTML = '';
         $target.appendChild(this.getElement());
     }
 }
