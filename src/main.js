@@ -1,7 +1,8 @@
 import axios from 'axios';
+import 'howler';
 
 import Typewriter from './modules/typewriter';
-import { AudioElement, ImageElement, TextElement } from './elements';
+import { ImageElement, TextElement } from './elements';
 
 (function () {
     let $content = document.getElementById('content');
@@ -42,24 +43,26 @@ import { AudioElement, ImageElement, TextElement } from './elements';
         text.render($riddle);
     }
 
-    function setupBackground(url) {
-        $content.style.background = `#333 url("${url}") repeat 0 0`;
-    }
-
     function setupMusic(src) {
-        let music = new AudioElement(src);
-
-        music.setVolume(1.0);
-        music.play();
-        music.render($riddle);
+        let sound = new Howl({
+            src: [src],
+            autoplay: true,
+            loop: true,
+            volume: 1
+        });
     }
 
     function setupAmbience(src) {
-        let ambience = new AudioElement(src);
+        let sound = new Howl({
+            src: [src],
+            autoplay: true,
+            loop: true,
+            volume: 0.5,
+        });
+    }
 
-        ambience.setVolume(0.5);
-        ambience.play();
-        ambience.render($riddle);
+    function setupBackground(url) {
+        $content.style.background = `#333 url("${url}") repeat 0 0`;
     }
 
     function validateAnswer(text, callback) {
