@@ -11,15 +11,15 @@ import { AudioElement, ImageElement, TextElement } from './elements/all';
         let typewriter = new Typewriter();
         typewriter.render($content);
 
-        typewriter.on('enter', (payload) => {
-            validateAnswer(payload.value, (url) => {
-                if (url) {
-                    alert('Congratulation!');
-                } else {
-                    alert('Bad answer. Try again.');
-                }
-            });
-        });
+        // typewriter.on('enter', (payload) => {
+        //     validateAnswer(payload.value, (url) => {
+        //         if (url) {
+        //             alert('Congratulation!');
+        //         } else {
+        //             alert('Bad answer. Try again.');
+        //         }
+        //     });
+        // });
     }
 
     function loadRiddle(data) {

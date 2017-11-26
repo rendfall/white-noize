@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "axios": "^0.17.1",
+        "keyboardjs": "^2.4.1",
         "rxjs": "^5.5.2"
     }
 }

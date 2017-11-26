@@ -1,58 +1,68 @@
-import EventEmitter from 'super-event-emitter';
-import KEYCODES from './../common/keycodes';
-
-const EVENTS = {
-    ENTER: 'enter',
-    ESCAPE: 'escape'
-};
+import Keyboard from 'keyboardjs';
 
 class Typewriter {
     constructor() {
-        EventEmitter.mixin(this);
+        this.$text = null;
+        this.$overlay = null;
 
         this.createDOM();
         this.setupListeners();
     }
 
-    setText(val) {
-        this.$text.innerText = val;
+    setText(value) {
+        this.$text.innerText += value;
+        this.refresh();
+    }
+
+    getText() {
+        return this.$text.innerText.trim();
     }
 
     clearText() {
-        this.$input.value = '';
         this.$text.innerText = '';
         this.refresh();
     }
 
-    setFocus() {
-        this.$input.focus();
+    setupListeners() {
+        Keyboard.on('', (keyEvent) => this.delegateKeyAction(keyEvent));
     }
 
-    doKeyAction(keyCode) {
-        switch (keyCode) {
-            case KEYCODES.ESCAPE:
-                this.emit(EVENTS.ESCAPE);
-                break;
-            case KEYCODES.ENTER:
-                this.emit(EVENTS.ENTER, { value: this.$input.value });
-                this.clearText();
-                break;
+    delegateKeyAction(keyEvent) {
+        let key = keyEvent.key;
+
+        switch (key) {
+            case 'Enter':
+                return this.handleEnterKey();
+
+            case 'Escape':
+                return this.handleEscapeKey();
+
+            default:
+                return this.handleAnyKey(key);
         }
     }
 
-    doInputAction() {
-        this.setText(event.target.value);
-        this.refresh();
+    handleEnterKey() {
+        if (!this.hasValue()) {
+            return;
+        }
+
+        this.clearText();
     }
 
-    setupListeners() {
-        let $i = this.$input;
+    handleEscapeKey() {
+        if (!this.hasValue()) {
+            return;
+        }
 
-        $i.addEventListener('input', (event) => this.doInputAction());
-        $i.addEventListener('keyup', (event) => this.doKeyAction(event.keyCode));
-        $i.addEventListener('blur', (event) => this.setFocus());
+        this.clearText();
+    }
 
-        this.on(EVENTS.ESCAPE, (event) => this.clearText());
+    handleAnyKey(key) {
+        let regex = new RegExp("^[a-zA-Z0-9]$");
+        if (regex.test(key)) {
+            this.setText(key);
+        }
     }
 
     render($target) {
@@ -60,8 +70,7 @@ class Typewriter {
     }
 
     hasValue() {
-        let value = this.$input.value.trim();
-        return (value.length > 0);
+        return (this.getText().length > 0);
     }
 
     addDimmer() {
@@ -83,14 +92,9 @@ class Typewriter {
     createDOM() {
         let $o = this.$overlay = document.createElement('div');
         let $t = this.$text = document.createElement('i');
-        let $i = this.$input = document.createElement('input');
 
         $o.id = 'overlay';
-        $i.type = 'text';
-        $i.autofocus = true;
-
         $o.appendChild($t);
-        $o.appendChild($i);
     }
 }
 
