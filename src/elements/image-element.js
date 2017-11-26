@@ -1,6 +1,6 @@
-import Element from './element';
+import { Element } from './element';
 
-class ImageElement extends Element {
+export class ImageElement extends Element {
     constructor(src) {
         super('img');
 
@@ -17,5 +17,3 @@ class ImageElement extends Element {
         this.setAttributes({ src });
     }
 }
-
-export default ImageElement;

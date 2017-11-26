@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import Typewriter from './modules/typewriter';
-import { AudioElement, ImageElement, TextElement } from './elements/all';
+import { AudioElement, ImageElement, TextElement } from './elements';
 
 (function () {
     let $content = document.getElementById('content');

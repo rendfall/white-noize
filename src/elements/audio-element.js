@@ -1,6 +1,6 @@
-import Element from './element';
+import { Element } from './element';
 
-class AudioElement extends Element {
+export class AudioElement extends Element {
     constructor(src, type = 'audio/mpeg') {
         super('audio');
 
@@ -30,5 +30,3 @@ class AudioElement extends Element {
         this.getElement().pause();
     }
 }
-
-export default AudioElement;

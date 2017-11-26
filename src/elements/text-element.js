@@ -1,6 +1,6 @@
-import Element from './element';
+import { Element } from './element';
 
-class TextElement extends Element {
+export class TextElement extends Element {
     constructor(text) {
         super('i');
         this.setHTML(text);
@@ -10,5 +10,3 @@ class TextElement extends Element {
         this.getElement().innerHTML = html;
     }
 }
-
-export default TextElement;

@@ -1,4 +1,4 @@
-class Element {
+export class Element {
     constructor(nodeName) {
         this.$element = document.createElement(nodeName);
     }
@@ -27,5 +27,3 @@ class Element {
         $target.appendChild(this.getElement());
     }
 }
-
-export default Element;
