@@ -3,7 +3,7 @@ import Keyboard from 'keyboardjs';
 const INITIAL_FONT_SIZE = '22vw';
 const LETTER_LIMIT = 80;
 
-class Typewriter {
+export class Typewriter {
     constructor() {
         this.$text = null;
         this.$overlay = null;
@@ -120,5 +120,3 @@ class Typewriter {
         $o.appendChild($t);
     }
 }
-
-export default Typewriter;
