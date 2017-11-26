@@ -11,6 +11,9 @@ class App {
         this.$content = $content;
         this.$riddle = $riddle;
 
+        this.ambience = null;
+        this.music = null;
+
         this.setupTypewriter();
         this.setupRiddle();
     }
@@ -24,7 +27,7 @@ class App {
                 }
 
                 this.validateAnswer(value, (response) => {
-                    if (response) {
+                    if (response.data) {
                         this.loadRiddle(response.data)
                     } else {
                         alert('Bad answer. Try again.');
@@ -37,6 +40,10 @@ class App {
 
     loadRiddle(data) {
         let { image, content, background, music, ambience } = data;
+
+        this.$riddle.innerHTML = '';
+        this.music && this.music.unload();
+        this.ambience && this.ambience.unload();
 
         this.setupImage(image);
         this.setupText(content);
@@ -56,7 +63,7 @@ class App {
     }
 
     setupMusic(src) {
-        let sound = new Howl({
+        this.music = new Howl({
             src: [src],
             autoplay: true,
             loop: true,
@@ -65,7 +72,7 @@ class App {
     }
 
     setupAmbience(src) {
-        let sound = new Howl({
+        this.ambience = new Howl({
             src: [src],
             autoplay: true,
             loop: true,
