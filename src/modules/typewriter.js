@@ -45,6 +45,9 @@ export class Typewriter {
             case 'escape':
                 return this.handleEscapeKey();
 
+            case 'backspace':
+                return this.handleBackspaceKey();
+
             default:
                 return this.handleAnyKey(key);
         }
@@ -56,6 +59,16 @@ export class Typewriter {
         }
 
         this.clearText();
+    }
+
+    handleBackspaceKey() {
+        if (!this.hasValue()) {
+            return;
+        }
+
+        let text = this.$text.innerText;
+        this.$text.innerText = text.slice(0, -1);
+        this.refresh();
     }
 
     handleEscapeKey() {
