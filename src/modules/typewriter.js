@@ -1,5 +1,8 @@
 import Keyboard from 'keyboardjs';
 
+const INITIAL_FONT_SIZE = '22vw';
+const LETTER_LIMIT = 80;
+
 class Typewriter {
     constructor() {
         this.$text = null;
@@ -10,6 +13,10 @@ class Typewriter {
     }
 
     setText(value) {
+        if (this.$text.innerText.length > LETTER_LIMIT) {
+            return;
+        }
+
         this.$text.innerText += value;
         this.refresh();
     }
@@ -20,6 +27,7 @@ class Typewriter {
 
     clearText() {
         this.$text.innerText = '';
+        this.$text.style.fontSize = INITIAL_FONT_SIZE;
         this.refresh();
     }
 
@@ -28,13 +36,13 @@ class Typewriter {
     }
 
     delegateKeyAction(keyEvent) {
-        let key = keyEvent.key;
+        let key = keyEvent.key.toLowerCase();
 
         switch (key) {
-            case 'Enter':
+            case 'enter':
                 return this.handleEnterKey();
 
-            case 'Escape':
+            case 'escape':
                 return this.handleEscapeKey();
 
             default:
@@ -82,10 +90,23 @@ class Typewriter {
     }
 
     refresh() {
+        this.resize();
+
         if (this.hasValue()) {
             this.addDimmer();
         } else {
             this.removeDimmer();
+        }
+    }
+
+    resize() {
+        let windowWidth = window.innerWidth;
+        let textWidth = this.$text.clientWidth;
+
+        if (textWidth > windowWidth) {
+            let fontSize = parseInt(this.$text.style.fontSize);
+            this.$text.style.fontSize = `${fontSize - 1}vw`;
+            this.resize();
         }
     }
 
@@ -94,6 +115,8 @@ class Typewriter {
         let $t = this.$text = document.createElement('i');
 
         $o.id = 'overlay';
+        $t.style.fontSize = INITIAL_FONT_SIZE;
+
         $o.appendChild($t);
     }
 }
