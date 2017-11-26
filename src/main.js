@@ -4,13 +4,18 @@ import 'howler';
 import Typewriter from './modules/typewriter';
 import { ImageElement, TextElement } from './elements';
 
-(function () {
-    let $content = document.getElementById('content');
-    let $riddle = document.getElementById('riddle');
 
-    function setupTypewriter() {
+class App {
+    constructor({ $content, $riddle }) {
+        this.$content = $content;
+        this.$riddle = $riddle;
+
+        this.setupTypewriter();
+        this.setupRiddle();
+    }
+
+    setupTypewriter() {
         let typewriter = new Typewriter();
-        typewriter.render($content);
 
         // typewriter.on('enter', (payload) => {
         //     validateAnswer(payload.value, (url) => {
@@ -21,29 +26,31 @@ import { ImageElement, TextElement } from './elements';
         //         }
         //     });
         // });
+
+        typewriter.render(this.$content);
     }
 
-    function loadRiddle(data) {
+    loadRiddle(data) {
         let { image, content, background, music, ambience } = data;
 
-        setupImage(image);
-        setupText(content);
-        setupBackground(background);
-        setupMusic(music);
-        setupAmbience(ambience);
+        this.setupImage(image);
+        this.setupText(content);
+        this.setupBackground(background);
+        this.setupMusic(music);
+        this.setupAmbience(ambience);
     }
 
-    function setupImage(src) {
-        let image = new ImageElement(src);
-        image.render($riddle);
+    setupImage(src) {
+        let $image = new ImageElement(src);
+        $image.render(this.$riddle);
     }
 
-    function setupText(content) {
-        let text = new TextElement(content);
-        text.render($riddle);
+    setupText(content) {
+        let $text = new TextElement(content);
+        $text.render(this.$riddle);
     }
 
-    function setupMusic(src) {
+    setupMusic(src) {
         let sound = new Howl({
             src: [src],
             autoplay: true,
@@ -52,7 +59,7 @@ import { ImageElement, TextElement } from './elements';
         });
     }
 
-    function setupAmbience(src) {
+    setupAmbience(src) {
         let sound = new Howl({
             src: [src],
             autoplay: true,
@@ -61,11 +68,11 @@ import { ImageElement, TextElement } from './elements';
         });
     }
 
-    function setupBackground(url) {
-        $content.style.background = `#333 url("${url}") repeat 0 0`;
+    setupBackground(url) {
+        this.$content.style.background = `#333 url("${url}") repeat 0 0`;
     }
 
-    function validateAnswer(text, callback) {
+    validateAnswer(text, callback) {
         let method = 'post';
         let url = 'http://whitenoize.pl/zest_riddle/';
         let data = {
@@ -79,18 +86,20 @@ import { ImageElement, TextElement } from './elements';
             .catch((error) => { console.log(error) });
     }
 
-    function setupRiddle() {
+    setupRiddle() {
         let url = 'http://whitenoize.pl/api/get_riddle/index.php';
         let method = 'post';
         let data = { name: 'zest_riddle', password: 'one' };
 
         axios.request({ method, url, data })
-            .then((response) => loadRiddle(response.data))
+            .then((response) => this.loadRiddle(response.data))
             .catch((error) => { console.log(error) });
     }
+}
 
-    window.addEventListener('load', () => {
-        setupTypewriter();
-        setupRiddle();
-    });
-})();
+window.addEventListener('load', () => {
+    let $content = document.getElementById('content');
+    let $riddle = document.getElementById('riddle');
+
+    new App({ $content, $riddle });
+});
