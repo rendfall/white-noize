@@ -1,7 +1,7 @@
 import axios from 'axios';
 import 'howler';
 
-import { Typewriter } from './modules/typewriter';
+import { Typewriter } from './core/typewriter';
 import { ImageElement, TextElement } from './elements';
 
 import './assets/styles.scss';
