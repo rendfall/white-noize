@@ -4,6 +4,7 @@ import 'howler';
 import Typewriter from './modules/typewriter';
 import { ImageElement, TextElement } from './elements';
 
+import './assets/styles.scss';
 
 class App {
     constructor({ $content, $riddle }) {
