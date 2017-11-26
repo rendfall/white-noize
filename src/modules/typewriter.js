@@ -49,7 +49,7 @@ export class Typewriter {
                 return this.handleBackspaceKey();
 
             default:
-                return this.handleAnyKey(key);
+                return this.handleCharKey(key);
         }
     }
 
@@ -79,7 +79,7 @@ export class Typewriter {
         this.clearText();
     }
 
-    handleAnyKey(key) {
+    handleCharKey(key) {
         let regex = new RegExp("^[a-zA-Z0-9]$");
         if (regex.test(key)) {
             this.setText(key);
