@@ -2,6 +2,7 @@ import Keyboard from 'keyboardjs';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/distinctUntilChanged';
+import 'rxjs/add/operator/filter';
 
 const INITIAL_FONT_SIZE = '22vw';
 const LETTER_LIMIT = 80;
@@ -124,6 +125,7 @@ export class Typewriter {
 
         this.value$
             .distinctUntilChanged()
+            .filter(value => value)
             .subscribe((...args) => void callback.call(callback, ...args));
     }
 

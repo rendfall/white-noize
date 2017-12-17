@@ -22,10 +22,6 @@ class App {
         let typewriter = new Typewriter();
 
         typewriter.onValueChange((value) => {
-                if (!value) {
-                    return;
-                }
-
                 this.validateAnswer(value, (response) => {
                     if (response.data) {
                         this.loadRiddle(response.data)
